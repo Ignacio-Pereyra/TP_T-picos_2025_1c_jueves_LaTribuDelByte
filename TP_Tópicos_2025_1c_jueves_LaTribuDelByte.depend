@@ -1,0 +1,18 @@
+# depslib dependency file v1.0
+1749495244 source:e:\universidad\2025\topicos\tp_tópicos_2025_1c_jueves_latribudelbyte\main.c
+	<stdio.h>
+	<stdlib.h>
+	<stdbool.h>
+	"Funcion.h"
+
+1749504858 e:\universidad\2025\topicos\tp_tópicos_2025_1c_jueves_latribudelbyte\funcion.h
+	<stdbool.h>
+	<stdio.h>
+
+1749505016 source:e:\universidad\2025\topicos\tp_tópicos_2025_1c_jueves_latribudelbyte\funcion.c
+	"Funcion.h"
+	<stdbool.h>
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+
