@@ -25,7 +25,8 @@ int leerArchivoTxt(const char *txtName, int sizeTxt, EsErrorFatal esErrorFatalEm
     }
 
     while(fgets(linea, sizeTxt, archLectura)){
-        dateFormatChange(linea, registro, archEscritura);
+        CommaToDot(linea, registro);
+        fprintf(archEscritura, linea);
     }
 
     fclose(archLectura);
@@ -58,6 +59,26 @@ bool dateFormatChange(char* linea, void* registro, FILE *txtEscribir) {
 
     // Escribir en archivo en nuevo formato
     fprintf(txtEscribir, "%04d-%02d-%02d;", iicLinea->Fecha.anio, iicLinea->Fecha.mes, iicLinea->Fecha.dia);
+
+    return true;
+}
+
+bool CommaToDot(char* linea, void* registro){
+    char* act = strchr(linea, '\n');
+    if (!act) {
+        return ERROR_LINEA_LARGA;
+    }
+    //*act = '\0';  // lo saco por ahora para leer bien el archivo
+    act = strrchr(linea, ';');
+    act = act + 1;
+
+    while(*act != '\0'){
+        if(*act == ','){
+            *act = '.';
+            return true;
+        }
+        act = act + 1;
+    }
 
     return true;
 }

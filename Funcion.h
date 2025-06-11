@@ -30,4 +30,7 @@ int leerArchivoTxt(const char *txtName, int sizeTxt, EsErrorFatal esErrorFatalEm
 bool dateFormatChange(char* linea, void* registro, FILE *archTxt);
 bool esErrorFatalEmpleado(int cod);
 
+
+//Punto 2
+bool CommaToDot(char* linea, void* registro);
 #endif // FUNCION_H_INCLUDED
