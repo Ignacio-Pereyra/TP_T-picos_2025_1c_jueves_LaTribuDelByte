@@ -27,7 +27,7 @@ int leerArchivoTxt(const char *txtName, int sizeTxt, EsErrorFatal esErrorFatalEm
     while(fgets(linea, sizeTxt, archLectura)){
         //CommaToDot(linea, registro); // Punto 2
         //decryptSentences(linea, registro); //punto 3
-        DataLoading(linea, registro);
+        DataLoading(linea, registro); //Dentro esta el punto 2, 3 y 4
         fprintf(archEscritura, linea);
     }
 
@@ -38,35 +38,7 @@ int leerArchivoTxt(const char *txtName, int sizeTxt, EsErrorFatal esErrorFatalEm
     return TODO_OK;
 }
 
-
-bool dateFormatChange(char* linea, void* registro, FILE *txtEscribir) {
-    char fechatxt[20];
-    icc *iicLinea = registro;
-
-    // Validar salto de línea
-    char* act = strchr(linea, '\n');
-    if (!act) {
-        return ERROR_LINEA_LARGA;
-    }
-    *act = '\0'; // Cortar línea en '\n'
-
-    // Cortar en punto y coma
-    act = strchr(linea, ';');
-    if (!act) return ERROR_LINEA_LARGA;
-    *act = '\0';  // Terminar la fecha
-
-    // Extraer y convertir fecha
-    sscanf(linea, "\"%[^\"]\"", fechatxt);
-    sscanf(fechatxt, "%d/%d/%d", &iicLinea->Fecha.dia, &iicLinea->Fecha.mes, &iicLinea->Fecha.anio);
-
-    // Escribir en archivo en nuevo formato
-    fprintf(txtEscribir, "%04d-%02d-%02d;", iicLinea->Fecha.anio, iicLinea->Fecha.mes, iicLinea->Fecha.dia);
-
-    return true;
-}
-
-
-
+/*
 bool CommaToDot(char* linea, void* registro){
     char* act = strchr(linea, '\n');
     if (!act) {
@@ -86,7 +58,7 @@ bool CommaToDot(char* linea, void* registro){
 
     return false;
 }
-
+*/
 bool DataLoading(char* linea, void* registro){
     icc * iccGenerales = registro;
     char Fecha[20];
@@ -100,17 +72,19 @@ bool DataLoading(char* linea, void* registro){
 
     sscanf(linea, "\"%19[^\"]\";\"%29[^\"]\";%16s", Fecha, iccGenerales->nivel_general_aperturas, indiceTxt);
 
-    CommaToDot2(indiceTxt); // punto 2
+    CommaToDot2(indiceTxt);                                  // punto 2
 
-    iccGenerales->indice_icc = atof(indiceTxt); // paso a double por si es necesario trabajar con numero mas adelante
+    iccGenerales->indice_icc = atof(indiceTxt);              // paso a double por si es necesario trabajar con numero mas adelante
 
-    act = strrchr(linea, ';');   // Voy al ultimo ";"
-                                 // incremento en uno para posicionarme despues del ;
-    strcpy(act + 1, indiceTxt);  // copio el indicie con . a la linea original para escribir poder hacer un fscanf cuandoo termine la funcion
+    act = strrchr(linea, ';');                               // Voy al ultimo ";"
+                                                             // incremento en uno para posicionarme despues del ;
+    strcpy(act + 1, indiceTxt);                              // copio el indicie con . a la linea original para escribir
+                                                             // y poder hacer un fscanf cuandoo termine la funcion
 
     *act = '\0';
     act2 = act;
     decryptSentences(iccGenerales->nivel_general_aperturas); // punto 3, desencripto la cadena
+    normalizarCad(iccGenerales->nivel_general_aperturas);    // punto 4, normalizo la cadena
     act2 = strrchr(linea, ';');                              // busco el siguiente ; (para atras)
     strcpy(act2 + 1, iccGenerales->nivel_general_aperturas); // copio la cadena a la linea original
     *act = ';';                                              // saco el \0 ya que no es mas fin de linea
@@ -118,7 +92,7 @@ bool DataLoading(char* linea, void* registro){
     return true;
 }
 
-bool CommaToDot2(char* linea){
+bool CommaToDot2(char* linea){      //Punto 1
 
     while(*linea != '\0'){
         if(*linea == ','){
@@ -130,18 +104,16 @@ bool CommaToDot2(char* linea){
     return false;
 }
 
-bool decryptSentences(char* linea){
+bool decryptSentences(char* linea){ //Punto 2
     int pos = 1;
     while((*linea)){
         if(esLetra(*linea)){
-            if(esPar(pos)){ // Si es par incrementa en 2
+            if(esPar(pos)){         // Si es par incrementa en 2
                 *linea = tolower(*linea);
-                printf(" %d - %d  \n", 122,*linea);
-                ((122 - (*linea)) < 2)? (*linea = '`' + ((*linea + 2) % 'z')): (*linea = *linea + 2);
-            }else{          // Si es impar incrementa en 4
+                (('z' - (*linea)) < 2)? (*linea = '`' + ((*linea + 2) % 'z')): (*linea = *linea + 2);
+            }else{                  // Si es impar incrementa en 4
                 *linea = tolower(*linea);
-                printf(" %d - %d  \n", 122,*linea);
-                ((122 - (*linea)) < 4)? (*linea = '`' + ((*linea + 4) % 'z')): (*linea = *linea + 4);
+                (('z' - (*linea)) < 4)? (*linea = '`' + ((*linea + 4) % 'z')): (*linea = *linea + 4);
             }
         }
         pos++;
@@ -158,13 +130,33 @@ bool esLetra(char letra)
 bool esPar(int num){
     return num % 2 == 0;
 }
+
+bool normalizarCad(char* linea){  //Punto 4
+    if(esLetra(*linea)){
+        *linea = toupper(*linea); //Si el primer caracter es letra, lo paso a mayuscula
+    }
+    linea++;
+    while(*linea){                //Cambio los guiones bajos por espacios hasta llegar al final de la cadena
+        if(*linea == '_'){
+           *linea = ' ';
+        }
+        linea++;
+    }
+    return true;
+}
+
 bool esErrorFatalEmpleado(int cod)
 {
     switch(cod)
     {
-        case 1:
+        case ERROR_MEMORIA:
             return true;
 
+        case ERROR_ARCHIVO_TXT:
+            return true;
+
+        case ERROR_LINEA_LARGA:
+            return true;
         default:
             return false;
     }

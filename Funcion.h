@@ -37,9 +37,12 @@ bool CommaToDot(char* linea, void* registro);
 bool CommaToDot2(char* linea);
 
 
-//punto 3
+//Punto 3
 bool decryptSentences(char* linea);
 bool esLetra(char letra);
 bool esPar(int num);
+
+//Punto 4
+bool normalizarCad(char* linea);
 
 #endif // FUNCION_H_INCLUDED
