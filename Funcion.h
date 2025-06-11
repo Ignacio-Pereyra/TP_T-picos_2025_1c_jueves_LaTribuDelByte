@@ -25,6 +25,7 @@ typedef struct{
 typedef bool (*EsErrorFatal)(int cod);
 
 int leerArchivoTxt(const char *txtName, int sizeTxt, EsErrorFatal esErrorFatalEmpleado);
+bool DataLoading(char* linea, void* registro);
 
 //Punto 1
 bool dateFormatChange(char* linea, void* registro, FILE *archTxt);
@@ -33,4 +34,12 @@ bool esErrorFatalEmpleado(int cod);
 
 //Punto 2
 bool CommaToDot(char* linea, void* registro);
+bool CommaToDot2(char* linea);
+
+
+//punto 3
+bool decryptSentences(char* linea);
+bool esLetra(char letra);
+bool esPar(int num);
+
 #endif // FUNCION_H_INCLUDED

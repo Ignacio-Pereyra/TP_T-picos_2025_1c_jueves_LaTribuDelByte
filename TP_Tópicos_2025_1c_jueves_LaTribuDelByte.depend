@@ -5,14 +5,15 @@
 	<stdbool.h>
 	"Funcion.h"
 
-1749670858 e:\universidad\2025\topicos\tp_tópicos_2025_1c_jueves_latribudelbyte\funcion.h
+1749679143 e:\universidad\2025\topicos\tp_tópicos_2025_1c_jueves_latribudelbyte\funcion.h
 	<stdbool.h>
 	<stdio.h>
 
-1749672775 source:e:\universidad\2025\topicos\tp_tópicos_2025_1c_jueves_latribudelbyte\funcion.c
+1749682312 source:e:\universidad\2025\topicos\tp_tópicos_2025_1c_jueves_latribudelbyte\funcion.c
 	"Funcion.h"
 	<stdbool.h>
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
+	<ctype.h>
 
