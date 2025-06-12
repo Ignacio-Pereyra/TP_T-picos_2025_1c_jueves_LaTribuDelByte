@@ -88,18 +88,23 @@ bool DataLoading(char* linea, void* registro){
     act2 = strrchr(linea, ';');                              // busco el siguiente ; (para atras)
     strcpy(act2 + 1, iccGenerales->nivel_general_aperturas); // copio la cadena a la linea original
     *act = ';';                                              // saco el \0 ya que no es mas fin de linea
+    act2 = strchr(linea, '\0');
+    *act2 = ';';
+    Clasificador(iccGenerales->nivel_general_aperturas, strchr(linea, '\0')); //Punto 5, agrega un nuevo campo al final de la linea
 
+    linea++;                                                 //Se agrega salto de linea para visualizar mejor el texto y corroborar los resultados
+    *linea = '\n';
     return true;
 }
 
 bool CommaToDot2(char* linea){      //Punto 1
-
-    while(*linea != '\0'){
-        if(*linea == ','){
-            *linea = '.';
+    char* ptr = linea;
+    while(*ptr != '\0'){
+        if(*ptr == ','){
+            *ptr = '.';
             return true;
         }
-        linea = linea + 1;
+        ptr = ptr + 1;
     }
     return false;
 }
@@ -143,6 +148,21 @@ bool normalizarCad(char* linea){  //Punto 4
         linea++;
     }
     return true;
+}
+
+bool Clasificador(char* linea, char* finCad){ // Punto 5
+    char texto[2][15] = {"Nivel general","Capitulos"};
+    if(strcmp(linea, texto[0]) == 0){
+         finCad =  strrchr(finCad, '\0');
+        *finCad = ';';
+        strcpy(finCad + 1, texto[0]);
+        return true;
+    }else{
+        *finCad = ';';
+        strcpy(finCad + 1, texto[1]);
+        return true;
+    }
+    return false;
 }
 
 bool esErrorFatalEmpleado(int cod)

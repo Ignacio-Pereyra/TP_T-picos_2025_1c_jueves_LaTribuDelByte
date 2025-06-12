@@ -45,4 +45,7 @@ bool esPar(int num);
 //Punto 4
 bool normalizarCad(char* linea);
 
+//Punto 5
+bool Clasificador(char* linea, char* finCad);
+
 #endif // FUNCION_H_INCLUDED
